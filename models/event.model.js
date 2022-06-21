@@ -31,7 +31,7 @@ const eventSchema = new mongoose.Schema(
         {
           registeredId: String,
           registeredPseudo: String,
-          timespamp: Number,
+          timestamp: Number,
         },
       ],
       required: true,
@@ -42,7 +42,7 @@ const eventSchema = new mongoose.Schema(
     },
   },
   {
-    timespamps: true,
+    timestamps: true,
   }
 );
 
