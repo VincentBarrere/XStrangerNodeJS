@@ -27,13 +27,7 @@ const eventSchema = new mongoose.Schema(
       required: true,
     },
     registers: {
-      type: [
-        {
-          registeredId: String,
-          registeredPseudo: String,
-          timestamp: Number,
-        },
-      ],
+      type: [String],
       required: true,
     },
     category: {

@@ -58,3 +58,77 @@ module.exports.deleteEvent = (req, res) => {
     else console.log("Delete error : " + err);
   });
 };
+
+/*module.exports.registration = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    await EventModel.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { registration: req.body.id } },
+      { new: true },
+      (err, docs) => {
+        if (err) return res.status(401).send(err);
+      }
+    );
+
+    await UserModel.findByIdAndUpdate(
+      req.body.id,
+      { $addToSet: { registers: req.params.id } },
+      { new: true },
+      (err, docs) => {
+        if (!err) return res.send(docs);
+        else return res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
+};*/
+
+module.exports.registration = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    await EventModel.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { registers: req.body.id } },
+      { new: true }
+    ).catch((err) => res.status(400).send({ message: err }));
+
+    await UserModel.findByIdAndUpdate(
+      req.body.id,
+      { $addToSet: { registration: req.params.id } },
+      { new: true }
+    )
+      .then((docs) => res.status(201).send(docs))
+      .catch((err) => res.status(400).send({ message: err }));
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
+};
+
+module.exports.deregistration = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    await EventModel.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { registers: req.body.id } },
+      { new: true }
+    ).catch((err) => res.status(400).send({ message: err }));
+
+    await UserModel.findByIdAndUpdate(
+      req.body.id,
+      { $pull: { registration: req.params.id } },
+      { new: true }
+    )
+      .then((docs) => res.status(201).send(docs))
+      .catch((err) => res.status(400).send({ message: err }));
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
+};

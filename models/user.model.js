@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
     following: {
       type: [String],
     },
+    registration: {
+      type: [String],
+      max: 10,
+    },
   },
   {
     timestamps: true,
