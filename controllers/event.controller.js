@@ -6,7 +6,7 @@ module.exports.readEvent = (req, res) => {
   EventModel.find((err, docs) => {
     if (!err) res.send(docs);
     else console.log("Error to get data : " + err);
-  });
+  }).sort({ createdAt: -1 });
 };
 
 module.exports.createEvent = async (req, res) => {
@@ -94,12 +94,20 @@ module.exports.registration = async (req, res) => {
   try {
     await EventModel.findByIdAndUpdate(
       req.params.id,
-      { $addToSet: { registers: req.body.id } },
+      {
+        $push: {
+          registers: {
+            registeredId: req.body.registeredId,
+            registeredPseudo: req.body.registeredPseudo,
+            timestamp: new Date().getTime(),
+          },
+        },
+      },
       { new: true }
     ).catch((err) => res.status(400).send({ message: err }));
 
     await UserModel.findByIdAndUpdate(
-      req.body.id,
+      req.body.registeredId,
       { $addToSet: { registration: req.params.id } },
       { new: true }
     )
@@ -117,12 +125,18 @@ module.exports.deregistration = async (req, res) => {
   try {
     await EventModel.findByIdAndUpdate(
       req.params.id,
-      { $pull: { registers: req.body.id } },
+      {
+        $pull: {
+          registers: {
+            _id: req.body.registrationId,
+          },
+        },
+      },
       { new: true }
     ).catch((err) => res.status(400).send({ message: err }));
 
     await UserModel.findByIdAndUpdate(
-      req.body.id,
+      req.body.userId,
       { $pull: { registration: req.params.id } },
       { new: true }
     )
