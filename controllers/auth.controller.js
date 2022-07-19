@@ -19,7 +19,7 @@ module.exports.signUp = async (req, res) => {
     res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = signUpErrors(err);
-    res.status(400).json({ errors });
+    res.status(200).json({ errors });
   }
 };
 
@@ -34,7 +34,7 @@ module.exports.signIn = async (req, res) => {
   } catch (err) {
     console.log(err);
     const errors = signInErrors(err);
-    res.status(400).json({ errors });
+    res.status(200).json({ errors });
   }
 };
 
