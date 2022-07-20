@@ -1,18 +1,31 @@
-import { Route, Routes } from "react-router-dom";
-import React from "react";
-import Home from "./pages/Home";
-import Profil from "./pages/Profil";
-import Trending from "./pages/Trending";
+import React, { useEffect, useState } from "react";
+import { UidContext } from "./components/AppContext";
+import axios from "axios";
+import Routes from "./components/Routes";
 
 function App() {
+  const [uid, setUid] = useState(null);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      await axios({
+        method: "get",
+        url: `${process.env.REACT_APP_API_URL}jwtid`,
+        withCredentials: true,
+      })
+        .then((res) => {
+          console.log(res);
+          setUid(res.data);
+        })
+        .catch((err) => console.log("No token"));
+    };
+    fetchToken();
+  }, []);
+
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profil" element={<Profil />} />
-        <Route path="/trending" element={<Trending />} />
-      </Routes>
-    </div>
+    <UidContext.Provider value={uid}>
+      <Routes />
+    </UidContext.Provider>
   );
 }
 
