@@ -29,9 +29,7 @@ module.exports.signInErrors = (err) => {
 
   if (err.message.includes("email")) {
     errors.email = "Email inconnu";
-  }
-
-  if (err.message.includes("password")) {
+  } else if (err.message.includes("password")) {
     errors.password = "Mauvais mot de passe";
   }
   return errors;
