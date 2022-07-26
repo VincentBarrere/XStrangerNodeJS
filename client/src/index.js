@@ -1,15 +1,28 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/index.scss";
+import { Provider } from "react-redux";
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "./reducers";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+//devtools
+import { composeWithDevTools } from "redux-devtools-extension";
+
+const root = createRoot(document.getElementById("root"));
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <div>
+        <App />
+      </div>
     </BrowserRouter>
-  </React.StrictMode>
+  </Provider>
 );

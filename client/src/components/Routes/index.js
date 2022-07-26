@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "../../pages/Home";
 import Profil from "../../pages/Profil";
 import Trending from "../../pages/Trending";
@@ -13,7 +13,6 @@ function index() {
         <Route path="/profil" element={<Profil />} />
         <Route path="/trending" element={<Trending />} />
       </Routes>
-      <Navigate to="/" replace={true} />
     </>
   );
 }
